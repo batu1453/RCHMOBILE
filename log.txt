@@ -1,3 +1,3 @@
-sigma1 + sigma = https://igma.com
+sigma1@gmail.com + sigma = https://igma.com
 sigma2 + sigma = https://igma.com
 sigma3 + sigma = https://igma.com
