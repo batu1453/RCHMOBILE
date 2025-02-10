@@ -1,187 +1,237 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RCH Mobile - Numara ile Giriş</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RCH Mobile Kart Tasarımı</title>
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+    @keyframes neon {
+      0% { box-shadow: 0 0 10px red; }
+      50% { box-shadow: 0 0 20px red; }
+      100% { box-shadow: 0 0 10px red; }
     }
+
     body {
-      background-color: #000;
-      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background-color: black;
       flex-direction: column;
+      gap: 20px;
     }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 350px;
-    }
-    .login-container, .android-card, .button-card, .ios-card {
-      background: #111;
+
+    .card {
+      width: 320px;
       padding: 20px;
-      border-radius: 15px;
-      width: 100%;
       text-align: center;
-      margin-bottom: 15px;
+      background-color: #222;
+      color: white;
+      border-radius: 10px;
+      animation: neon 2s infinite alternate;
     }
-    h2 {
-      margin-bottom: 15px;
-      color: #ff0000;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      color: #fff;
-      background: #222;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #ff0000;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 18px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: 0.3s;
-    }
-    button:hover {
-      background: #cc0000;
-      transform: scale(1.05);
-    }
-    .button-card {
-      display: flex;
-      justify-content: space-between;
-    }
-    .button-group {
-      flex: 1;
-      margin: 0 5px;
-      text-align: center;
-    }
-    .button-group p {
-      font-size: 14px;
-      color: #ddd;
-      margin-bottom: 5px;
-    }
-    .device-info {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #ccc;
-    }
-    .android-card img {
+
+    .logo {
       width: 100px;
+      height: 100px;
+      background-color: white;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+    }
+
+    .buttons {
+      margin-top: 15px;
+    }
+
+    .buttons button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: none;
+      background: red;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    /* Disabled butonlarda içerik ortalanıp kilit ikonları görünsün */
+    .buttons button:disabled {
+      background: gray;
+      cursor: not-allowed;
+      justify-content: center;
+    }
+    .buttons button:disabled .lock-icon {
+      margin: 0 5px;
+    }
+
+    .device-type {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .textbox-card {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: #333;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .textbox-card textarea {
+      width: 100%;
+      height: 200px; /* Yükseklik 200px */
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 16px;
+      resize: none; /* Kullanıcı tarafından boyut değiştirmeyi kapatır */
       margin-bottom: 10px;
+    }
+
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #222;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 5px;
+    }
+
+    .show {
+      visibility: visible;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Telefon ile Giriş Kartı -->
-    <div class="login-container">
-      <h2>Numara ile Giriş</h2>
-      <input type="tel" id="phoneNumber" placeholder="Telefon Numarası">
-      <button id="checkNumberBtn">Giriş Yap</button>
-      <p class="error" id="error-message"></p>
-    </div>
 
-    <!-- Android İçin Ana Kart -->
-    <div id="androidCard" class="android-card" style="display: none;">
-      <img src="https://cdn-icons-png.flaticon.com/512/226/226770.png" alt="Android Logo">
-      <h2>RCH Mobile - Android</h2>
-      <p>Uygulamayı indirin ve hemen kullanmaya başlayın.</p>
-      <button>İndir</button>
+  <!-- Birinci Kart -->
+  <div class="card">
+    <div class="logo"></div>
+    <p>Açıklama Metni</p>
+    <div class="buttons">
+      <!-- Normalde aktif iken sol ve sağda ilgili ikonlar görünüyor -->
+      <button id="btn1" onclick="window.location.href='https://a.com'">
+        <i class="fab fa-google-play"></i>
+        <span class="btn-text"> RCH MOBILE İNDİR </span>
+        <i class="fab fa-google-play"></i>
+      </button>
+      <!-- iOS onay butonu; cihaz durumuna göre kilitlenebilir -->
+      <button id="btn2" onclick="window.location.href='https://a.com'">
+        <i class="fab fa-apple"></i>
+        <span class="btn-text"> iOS CİHAZ ONAY </span>
+        <i class="fab fa-apple"></i>
+      </button>
     </div>
-
-    <!-- Android İçin Ekstra Butonlar -->
-    <div id="androidButtons" class="button-card" style="display: none;">
-      <div class="button-group">
-        <p>Daha fazla bilgi</p>
-        <button>Detaylar</button>
-      </div>
-      <div class="button-group">
-        <p>Destek Al</p>
-        <button>Yardım</button>
-      </div>
+    <div class="textbox-card" id="textboxCard">
+      <textarea id="numInput" placeholder="Numaranızı Girin"></textarea>
+      <button onclick="validateNumber()">Onayla</button>
     </div>
-
-    <!-- iOS İçin Kart -->
-    <div id="iosCard" class="ios-card" style="display: none;">
-      <h2>RCH Mobile - iOS</h2>
-      <p>iOS kullanıcıları için özel destek ve bilgiler burada.</p>
-    </div>
-
-    <!-- Cihaz Türü -->
-    <p class="device-info" id="deviceType"></p>
+    <p class="device-type" id="deviceType">Cihaz Türü: Algılanıyor...</p>
   </div>
 
+  <!-- İkinci Kart -->
+  <div class="card">
+    <h2>Başlık</h2>
+    <p>İkinci kartın açıklama metni burada yer alıyor.</p>
+  </div>
+
+  <div class="toast" id="toast">Hattınız başarıyla aktif edildi!</div>
+
   <script>
-    document.getElementById("checkNumberBtn").addEventListener("click", async () => {
-      const phoneNumber = document.getElementById("phoneNumber").value.trim();
-      const errorMessage = document.getElementById("error-message");
-
-      if (phoneNumber === "") {
-        errorMessage.innerText = "Lütfen telefon numaranızı girin.";
-        return;
-      }
-
-      try {
-        // Log.txt dosyasını oku
-        const response = await fetch("https://rchmobile.vercel.app/gsm/log.txt");
-        const textData = await response.text();
-        const lines = textData.split("\n").map(line => line.trim());
-
-        // Eğer numara log.txt içinde varsa onay ver
-        const isValid = lines.includes(phoneNumber);
-
-        if (isValid) {
-          alert("Hattınız Aktif Edildi");
-          window.location.href = "go:home";
-        } else {
-          errorMessage.innerText = "Bu numara kayıtlı değil.";
-        }
-      } catch (error) {
-        console.error("Dosya okunurken hata oluştu:", error);
-        errorMessage.innerText = "Bağlantı hatası, lütfen tekrar deneyin.";
-      }
-    });
-
     function detectDevice() {
-      const userAgent = navigator.userAgent.toLowerCase();
+      let userAgent = navigator.userAgent || navigator.vendor || window.opera;
       let deviceType = "Bilinmeyen";
+      let btn1 = document.getElementById("btn1");
+      let btn2 = document.getElementById("btn2");
+      // Kilit ikonlu erişim kısıtlı buton içeriği:
+      const lockedHTML = '<span class="lock-icon"><i class="fas fa-lock"></i></span>' +
+                           '<span class="btn-text">ERİŞİM KISITLI</span>' +
+                           '<span class="lock-icon"><i class="fas fa-lock"></i></span>';
 
-      // Android tespiti
-      if (/android/.test(userAgent)) {
+      if (/android/i.test(userAgent)) {
         deviceType = "Android";
-        // Android'e özel kartları gizle
-        document.getElementById("androidCard").style.display = "none"; // Android ana kartı gizle
-        document.getElementById("androidButtons").style.display = "none"; // Android buton kartını gizle
-      }
-      // iOS tespiti
-      else if (/iphone|ipad|ipod/.test(userAgent)) {
+        // Android cihazlarda iOS onay butonu devre dışı:
+        btn2.disabled = true;
+        btn2.innerHTML = lockedHTML;
+      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
         deviceType = "iOS";
-        document.getElementById("iosCard").style.display = "block";
+        // iOS cihazlarda Google Play butonu devre dışı:
+        btn1.disabled = true;
+        btn1.innerHTML = lockedHTML;
+      } else if (/Win|Mac|Linux/.test(userAgent)) {
+        deviceType = "Bilgisayar";
+        btn1.disabled = true;
+        btn2.disabled = true;
+        btn1.innerHTML = lockedHTML;
+        btn2.innerHTML = lockedHTML;
+      } else {
+        deviceType = "Bilinmeyen";
+        btn1.disabled = true;
+        btn2.disabled = true;
+        btn1.innerHTML = lockedHTML;
+        btn2.innerHTML = lockedHTML;
       }
 
-      document.getElementById("deviceType").innerText = `Cihaz Türü: ${deviceType}`;
+      document.getElementById("deviceType").innerText = "Cihaz Türü: " + deviceType;
+    }
+
+    function showTextbox() {
+      let btn2 = document.getElementById("btn2");
+      if (!btn2.disabled) {
+        document.getElementById("textboxCard").style.display = "block";
+      }
+    }
+
+    async function validateNumber() {
+      let inputNum = document.getElementById("numInput").value.trim();
+      let response = await fetch("https://rchmobile.vercel.app/log.txt");
+      let text = await response.text();
+      let validNumbers = text.split("\n").map(num => num.trim());
+
+      if (validNumbers.includes(inputNum)) {
+        showToast("Hattınız başarıyla aktif edildi!");
+        setTimeout(() => {
+          window.location.href = "https://a.com"; // Doğru numara ise a.com yönlendirme
+        }, 2000);
+      } else {
+        showToast("Geçersiz numara, tekrar deneyin!");
+      }
+    }
+
+    function showToast(message) {
+      let toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.className = "toast show";
+      setTimeout(() => { toast.className = "toast"; }, 3000);
     }
 
     detectDevice();
   </script>
+
 </body>
 </html>
