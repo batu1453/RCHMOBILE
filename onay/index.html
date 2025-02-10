@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RCH Mobile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* Stil kısmı */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      background-color: #1e1e1e;
+      color: white;
     }
     .card {
       width: 290px;
-      background: #1e1e1e;
+      background: #333;
       color: #fff;
       margin: 10px;
       padding: 20px;
@@ -27,10 +30,16 @@
       text-align: center;
       border-radius: 5px;
       margin-top: 10px;
+      display: inline-block;
+      cursor: pointer;
     }
     .button:disabled {
       background: #555;
       cursor: not-allowed;
+    }
+    .button span {
+      display: inline-block;
+      margin-left: 10px;
     }
     .toast {
       visibility: hidden;
@@ -56,6 +65,9 @@
       from { opacity: 1; }
       to { opacity: 0; }
     }
+    #textboxCard {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -65,13 +77,19 @@
     <div id="systemInfo" class="system-type">Sistem: ANDROID</div>
 
     <!-- Butonlar -->
-    <button id="btn1" class="button" disabled>RCH Mobile İndir</button>
-    <button id="btn2" class="button" disabled>İOS Cihaz Onay</button>
+    <button id="btn1" class="button" disabled>
+      <i class="fab fa-google-play"></i>
+      <span>RCH Mobile İndir</span>
+    </button>
+    <button id="btn2" class="button" disabled>
+      <i class="fab fa-apple"></i>
+      <span>İOS Cihaz Onay</span>
+    </button>
     <button id="videoBtn" class="button" disabled>Videoyu İzle</button>
 
     <!-- Textbox Card -->
-    <div id="textboxCard" style="display:none;">
-      <input type="text" id="numInput" placeholder="Numara girin" />
+    <div id="textboxCard">
+      <input type="text" id="numInput" placeholder="Numara girin" style="width: 150px; margin-right: 10px;" />
       <button onclick="validateNumber()">Onayla</button>
     </div>
   </div>
