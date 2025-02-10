@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RCH Mobile Kart Tasarımı</title>
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RCH nMobile Kart</title>
+
+  <!-- Google Fonts ve Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
   <style>
     @keyframes neon {
       0% { box-shadow: 0 0 10px red; }
@@ -18,86 +21,110 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: black;
+      background-color: #121212;
       flex-direction: column;
       gap: 20px;
+      font-family: 'Roboto', sans-serif;
     }
 
     .card {
-      width: 320px;
+      width: 290px; 
       padding: 20px;
       text-align: center;
-      background-color: #222;
+      background: #1E1E1E;
       color: white;
-      border-radius: 10px;
-      animation: neon 2s infinite alternate;
+      border-radius: 12px;
+      animation: neon 1.5s infinite alternate;
     }
 
     .logo {
-      width: 100px;
-      height: 100px;
-      background-color: white;
+      width: 80px;
+      height: 80px;
+      background: white;
       margin: 0 auto 10px;
       border-radius: 50%;
     }
 
     .user-info {
-      margin: 10px 0;
-      color: red;
       font-size: 16px;
+      font-weight: bold;
+      color: white;
+      text-transform: uppercase;
     }
 
     .system-info {
-      margin: 5px 0;
-      color: white;
       font-size: 14px;
+      color: #BBB;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .description {
+      font-size: 14px;
+      color: #CCCCCC;
+      margin-bottom: 15px;
     }
 
     .buttons {
-      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .buttons button {
       width: 100%;
       padding: 12px;
-      margin-top: 5px;
       border: none;
-      background: red;
+      background: linear-gradient(45deg, #FF3B3B, #FF7373);
       color: white;
       font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 14px;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background: linear-gradient(45deg, #FF7373, #FF3B3B);
     }
 
     .buttons button:disabled {
-      background: gray;
+      background: #444;
       cursor: not-allowed;
-      justify-content: center;
+      box-shadow: none;
+    }
+
+    .buttons button .material-icons {
+      font-size: 18px;
     }
 
     .textbox-card {
       display: none;
       margin-top: 15px;
       padding: 15px;
-      background: #333;
+      background: #252525;
       border-radius: 10px;
       text-align: center;
+      box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
     }
 
     .textbox-card textarea {
-      width: 100%;
-      height: 200px;
+      width: 150px;
+      height: 48px;
       padding: 10px;
       border: none;
       border-radius: 5px;
       text-align: center;
       font-size: 16px;
+      background: #1E1E1E;
+      color: white;
       resize: none;
       margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .toast {
@@ -106,12 +133,13 @@
       background-color: #222;
       color: white;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       border-radius: 5px;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
     }
 
     .show {
@@ -132,23 +160,25 @@
 </head>
 <body>
 
-  <!-- Birinci Kart -->
+  <!-- İlk Kart -->
   <div class="card">
     <div class="logo"></div>
-    <!-- Kullanıcı Adı ve Cihaz Türü Dinamik Bilgiler -->
+    
     <div class="user-info" id="userInfo"></div>
     <div class="system-info" id="systemInfo"></div>
-    
+
+    <div class="description">Sisteminize özel doğrulama işlemleri</div>
+
     <div class="buttons">
       <button id="btn1" onclick="window.location.href='https://a.com'">
-        <i class="fab fa-google-play"></i>
-        <span class="btn-text"> RCH MOBILE İNDİR </span>
-        <i class="fab fa-google-play"></i>
+        <span class="material-icons">android</span>
+        RCH MOBILE İNDİR
+        <span class="material-icons">android</span>
       </button>
-      <button id="btn2" onclick="window.location.href='https://a.com'">
-        <i class="fab fa-apple"></i>
-        <span class="btn-text"> iOS CİHAZ ONAY </span>
-        <i class="fab fa-apple"></i>
+      <button id="btn2" onclick="showTextbox()">
+        <span class="material-icons">apple</span>
+        iOS CİHAZ ONAY
+        <span class="material-icons">apple</span>
       </button>
     </div>
 
@@ -160,98 +190,74 @@
 
   <!-- İkinci Kart -->
   <div class="card">
-    <h2>Başlık</h2>
-    <p>İkinci kartın açıklama metni burada yer alıyor.</p>
+    <h2>Video İzleme</h2>
+    <p id="videoDescription">Bu kartta video izlemek için butona tıklayın.</p>
+    <div class="buttons">
+      <button id="videoBtn" onclick="window.location.href='https://android_video_link.com'">
+        <span class="material-icons">play_circle_filled</span>
+        Videoyu İzle
+        <span class="material-icons">play_circle_filled</span>
+      </button>
+    </div>
   </div>
 
-  <div class="toast" id="toast">Hattınız başarıyla aktif edildi!</div>
+  <!-- Toast Mesajı -->
+  <div id="toast" class="toast">HATTINIZ AKTİF EDİLMİŞTİR</div>
 
   <script>
-    function detectDevice() {
-      let userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      let btn1 = document.getElementById("btn1");
-      let btn2 = document.getElementById("btn2");
-      const lockedHTML = '<span class="lock-icon"><i class="fas fa-lock"></i></span>' +
-                           '<span class="btn-text">ERİŞİM KISITLI</span>' +
-                           '<span class="lock-icon"><i class="fas fa-lock"></i></span>';
+    // URL parametrelerini al
+    const urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('userName') || 'Kullanıcı';
+    const systemType = urlParams.get('systemType') || 'Bilinmeyen';
 
-      if (/android/i.test(userAgent)) {
-        btn2.disabled = true;
-        btn2.innerHTML = lockedHTML;
-      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        btn1.disabled = true;
-        btn1.innerHTML = lockedHTML;
-      } else if (/Win|Mac|Linux/.test(userAgent)) {
-        btn1.disabled = true;
-        btn2.disabled = true;
-        btn1.innerHTML = lockedHTML;
-        btn2.innerHTML = lockedHTML;
+        document.getElementById('userInfo').textContent = '@' + userName;
+    document.getElementById('systemInfo').textContent = systemType.toUpperCase();
+
+    // Cihaz türüne göre butonları kısıtla
+    const isAndroid = systemType === 'Android';
+    const isIos = systemType === 'iOS';
+    const isUnknown = systemType === 'Bilinmeyen';
+
+    // Buton kısıtlamaları
+    if (isAndroid) {
+      document.getElementById('btn1').disabled = true; // Android cihazda Buton 1 Kısıtlı
+      document.getElementById('btn2').disabled = false; // Android cihazda Buton 2 Açık
+      document.getElementById('videoBtn').disabled = false; // Video izleme açık
+    } else if (isIos) {
+      document.getElementById('btn1').disabled = true; // iOS cihazda Buton 1 Kısıtlı
+      document.getElementById('btn2').disabled = false; // iOS cihazda Buton 2 Açık
+      document.getElementById('videoBtn').disabled = true; // Video izleme kısıtlı
+    } else if (isUnknown) {
+      document.getElementById('btn1').disabled = true; // Bilinmeyen cihazda Buton 1 Kısıtlı
+      document.getElementById('btn2').disabled = true; // Bilinmeyen cihazda Buton 2 Kısıtlı
+      document.getElementById('videoBtn').disabled = true; // Video izleme kısıtlı
+    }
+
+    // Numara doğrulama ve Toast mesajı
+    function validateNumber() {
+      const input = document.getElementById('numInput').value;
+      const validNumbers = ['123456789', '987654321']; // Örnek numaralar
+      if (validNumbers.includes(input)) {
+        showToast('HATTINIZ AKTİF EDİLMİŞTİR');
+        window.location.href = 'https://a.com'; // Başarıyla aktif olan numara sonrası yönlendirme
       } else {
-        btn1.disabled = true;
-        btn2.disabled = true;
-        btn1.innerHTML = lockedHTML;
-        btn2.innerHTML = lockedHTML;
+        showToast('Geçersiz numara');
       }
     }
 
-    function showTextbox() {
-      let btn2 = document.getElementById("btn2");
-      if (!btn2.disabled) {
-        document.getElementById("textboxCard").style.display = "block";
-      }
-    }
-
-    async function validateNumber() {
-      let inputNum = document.getElementById("numInput").value.trim();
-      let response = await fetch("https://rchmobile.vercel.app/gsm/olucak");
-      let text = await response.text();
-      let validNumbers = text.split("\n").map(num => num.trim());
-
-      if (validNumbers.includes(inputNum)) {
-        showToast("Hattınız başarıyla aktif edildi!");
-        setTimeout(() => {
-          window.location.href = "https://a.com"; 
-        }, 2000);
-      } else {
-        showToast("Geçersiz numara, tekrar deneyin!");
-      }
-    }
-
+    // Toast mesajı gösterme
     function showToast(message) {
-      let toast = document.getElementById("toast");
-      toast.innerText = message;
-      toast.className = "toast show";
-      setTimeout(() => { toast.className = "toast"; }, 3000);
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast show';
+      setTimeout(() => toast.className = toast.className.replace('show', ''), 3000);
     }
 
-    function iosButtonClick() {
-      let btn2 = document.getElementById("btn2");
-      if (!btn2.disabled) {
-        showToast("HATTINIZ AKTİF EDİLMİŞTİR");
-      }
+    // Videoyu izleme butonunu gösterme
+    function showTextbox() {
+      const textboxCard = document.getElementById('textboxCard');
+      textboxCard.style.display = 'block'; // Textbox'ı göster
     }
-
-    function updateUserInfo() {
-      // URL sonundaki etiket ve sistem bilgisini al
-      let urlHash = window.location.hash.substring(1);  // URL'den etiket kısmını alıyoruz (örneğin: #AHMET)
-      let systemInfo = `${navigator.platform} - ${navigator.userAgent.indexOf('Chrome') > -1 ? 'CHROME' : 'BROWSER'}`;
-
-      // Kullanıcı adı ve sistem bilgilerini güncelle
-      if (urlHash) {
-        document.getElementById('userInfo').textContent = `🔎 @${urlHash}`;
-        document.getElementById('systemInfo').textContent = `Sistem: ${systemInfo}`;
-      } else {
-        document.getElementById('userInfo').textContent = '';
-        document.getElementById('systemInfo').textContent = '';
-      }
-    }
-
-    window.onload = function() {
-      detectDevice();
-      updateUserInfo();  // Sayfa yüklendiğinde kullanıcı bilgilerini güncelle
-    };
-
-  </script>
-
-</body>
-</html>
+    </script> <
+    /body> <
+    /html>
